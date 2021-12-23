@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+
+package apiGRPC;
+
+option go_package = "/grpc";
+
+service Fib{
+    rpc GetFib(FibRequest) returns (FibResponse) {}
+}
+
+message FibRequest {
+    int32 x = 1;
+    int32 y = 2;
+}
+
+message FibResponse {
+    repeated uint64 fibList = 1;
+}
