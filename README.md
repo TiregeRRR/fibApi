@@ -29,4 +29,4 @@ $ go run grpc/main.go
 Пример: http://127.0.0.1:8000/api/v1/?x=5&y=10
 
 ## GRPC 
-Обращение к api происходит через GRPC-клиент. Например: evans, Kreya
+Обращение к api происходит через GRPC-клиент. Например: evans, Kreya. Proto-файл находится в fibApi/proto
