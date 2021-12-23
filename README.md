@@ -21,3 +21,12 @@ $ go run rest/main.go
 ``` sh
 $ go run grpc/main.go
 ```
+
+## Использование 
+
+### HTTP REST
+Обращение к api происходит через обычный GET-запрос. 
+Пример: http://127.0.0.1:8000/api/v1/?x=5&y=10
+
+## GRPC 
+Обращение к api происходит через GRPC-клиент. Например: evans, Kreya
