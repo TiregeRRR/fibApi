@@ -1,7 +1,7 @@
 package main
 
 import (
-	grpc "interview/grpc/api"
+	grpc "github.com/TiregeRRR/fibApi/grpc/api"
 )
 
 func main() {

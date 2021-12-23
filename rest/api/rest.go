@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	f "interview/fibonacci"
+	f "github.com/TiregeRRR/fibApi/fibonacci"
 
 	"github.com/gorilla/mux"
 )

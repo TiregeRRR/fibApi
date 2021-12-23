@@ -1,7 +1,7 @@
 package main
 
 import (
-	r "interview/rest/api"
+	r "github.com/TiregeRRR/fibApi/rest/api"
 )
 
 func main() {

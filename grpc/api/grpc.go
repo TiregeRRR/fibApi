@@ -6,7 +6,7 @@ import (
 	"log"
 	"net"
 
-	f "interview/fibonacci"
+	f "github.com/TiregeRRR/fibApi/fibonacci"
 
 	"google.golang.org/grpc"
 )
