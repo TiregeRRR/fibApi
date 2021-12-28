@@ -3,9 +3,11 @@ package fibonacci
 import (
 	"context"
 	"errors"
+	"log"
 	"net/http"
 	"strconv"
 
+	"github.com/TiregeRRR/fibApi/config"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -43,11 +45,16 @@ func GetFibSlice(start, end string) ([]uint64, int, error) {
 
 // newPool возвращает указатель на клиент redis'a и заносит первые два элемента в кэш
 func newPool() *redis.Client {
+	cfg := config.GetConfig()
+	addr := cfg.GetString("redis_ip") + ":" + cfg.GetString("redis_port")
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
+		Addr:     addr,
+		Password: cfg.GetString("redis_pass"),
+		DB:       0,
 	})
+	if st := rdb.Ping(ctx); st.Err() != nil {
+		log.Fatalln("redis connect error: " + st.Err().Error())
+	}
 	rdb.Set(ctx, "0", 0, 0)
 	rdb.Set(ctx, "1", 1, 0)
 	return rdb
