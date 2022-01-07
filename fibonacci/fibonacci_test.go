@@ -1,6 +1,8 @@
 package fibonacci
 
 import (
+	"log"
+	"os"
 	"testing"
 )
 
@@ -50,6 +52,15 @@ func equal(a, b []string) bool {
 }
 
 func TestGetFibSlice(t *testing.T) {
+	err := os.Setenv("redis_ip", "127.0.0.1")
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println(os.Getenv("redis_ip"))
+	err = os.Setenv("redis_port", "6379")
+	if err != nil {
+		log.Println(err)
+	}
 	for _, tc := range testCasesSlice {
 		sl, _, err := GetFibSlice(tc.x, tc.y)
 		if !equal(sl, tc.expectedList) {

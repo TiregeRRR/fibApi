@@ -19,6 +19,10 @@ $ make run-docker
 ``` sh
 $ make run-docker ENVFILE="./config/someConf.env" 
 ```
+Запуск тестов происходит через
+``` sh
+$ make run-tests
+```
 
 ## Использование 
 
@@ -41,4 +45,4 @@ $ docker container ls
 $ docker container inspect <container name> | grep IPAddress
 ```
 
-Были проблемы с подключением к контейнеру из под Windows 10. Помог ответ от Russel Wheeler https://coderedirect.com/questions/355610/ping-docker-container-from-another-machine-in-the-network. На Linux Mint все работает сразу.
+Были проблемы с подключением к контейнеру из под Windows 10. Помог ответ от Russel Wheeler https://coderedirect.com/questions/355610/ping-docker-container-from-another-machine-in-the-network. На Linux Mint 20.02 все работало сразу.

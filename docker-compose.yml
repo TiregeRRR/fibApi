@@ -13,4 +13,4 @@ services:
       - rest_port=${rest_port}
     ports:
       - ${rest_port}:${rest_port}
-      - ${rest_port}:${grpc_port}
+      - ${grpc_port}:${grpc_port}

@@ -31,12 +31,18 @@ func (g *GRPCSrv) GetFib(ctx context.Context, fr *FibRequest) (*FibResponse, err
 func StartGRPC() {
 	go func() {
 		port := os.Getenv("rest_port")
+		if port == "" {
+			port = "8000"
+		}
 		mux := runtime.NewServeMux()
 		RegisterFibHandlerServer(context.Background(), mux, &GRPCSrv{})
 		log.Printf("Starting REST gateway on %v port\n", port)
 		log.Fatalln(http.ListenAndServe(":"+port, mux))
 	}()
 	port := os.Getenv("grpc_port")
+	if port == "" {
+		port = "8080"
+	}
 	l, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		log.Fatalln(err)

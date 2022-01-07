@@ -10,9 +10,6 @@ clear-proto:
 	rm api/grpc/fib_grpc.pb.go
 	rm api/grpc/fib.pb.go
 
-run-tests:
-	go test api/grpc/*.go
-	go test fibonacci/*.go
 
 
 update-modfile:
@@ -21,7 +18,13 @@ update-modfile:
 
 ENVFILE = ./config/conf.env
 run-docker:
-	docker-compose --env-file $(ENVFILE) up 
+	sudo docker-compose --env-file $(ENVFILE) up 
 
 build-and-run-docker:
-	docker-compose --env-file $(ENVFILE) up --build
+	sudo docker-compose --env-file $(ENVFILE) up --build
+
+run-tests:
+	sudo docker run --rm --name redis-test-instance -p 6379:6379 -d redis
+	go test -v fibonacci/*.go
+	go test -v api/grpc/*.go
+	sudo docker stop redis-test-instance
