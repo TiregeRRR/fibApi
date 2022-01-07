@@ -3,7 +3,7 @@
 
 ## Требования
 
-На компьютере должны быть установлены go и docker 
+На компьютере должны быть установлены go, make и docker 
 
 ## Запуск 
 
@@ -34,3 +34,11 @@ $ curl -XPOST -H "Content-type: application/json" -d '{
 
 ## GRPC 
 Обращение к api происходит через GRPC-клиент. Например: evans, Kreya. Proto-файл находится в fibApi/proto
+
+## Получение ip
+``` sh
+$ docker container ls
+$ docker container inspect <container name> | grep IPAddress
+```
+
+Были проблемы с подключением к контейнеру из под Windows 10. Помог ответ от Russel Wheeler https://coderedirect.com/questions/355610/ping-docker-container-from-another-machine-in-the-network. На Linux Mint все работает сразу.

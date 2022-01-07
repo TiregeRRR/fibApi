@@ -46,7 +46,6 @@ func GetFibSlice(start, end string) ([]string, int, error) {
 
 // newPool возвращает указатель на клиент redis'a и заносит первые два элемента в кэш
 func newPool() *redis.Client {
-	log.Println(os.Getenv("redis_port"))
 	addr := "redis:" + os.Getenv("redis_port")
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     addr,
