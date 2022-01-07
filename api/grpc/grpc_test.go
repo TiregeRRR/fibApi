@@ -1,20 +1,21 @@
-package apiGRPC
+package grpc
 
 import (
 	"context"
 	"errors"
+	"os"
 	"testing"
 )
 
 var tests = []struct {
 	X, Y          int32
-	expectedList  []uint64
+	expectedList  []string
 	expectedError error
 }{
 	{
 		X:             0,
 		Y:             5,
-		expectedList:  []uint64{0, 1, 1, 2, 3, 5},
+		expectedList:  []string{"0", "1", "1", "2", "3", "5"},
 		expectedError: nil,
 	},
 	{
@@ -34,7 +35,7 @@ var tests = []struct {
 	},
 }
 
-func equal(a, b []uint64) bool {
+func equal(a, b []string) bool {
 	if len(a) != len(b) {
 		return false
 	}
@@ -47,6 +48,7 @@ func equal(a, b []uint64) bool {
 }
 
 func TestGRPCWriteFibonacci(t *testing.T) {
+	os.Chdir("../..")
 	s := GRPCSrv{}
 	for _, tc := range tests {
 		req := &FibRequest{X: tc.X, Y: tc.Y}

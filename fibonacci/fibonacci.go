@@ -4,10 +4,11 @@ import (
 	"context"
 	"errors"
 	"log"
+	"math/big"
 	"net/http"
+	"os"
 	"strconv"
 
-	"github.com/TiregeRRR/fibApi/config"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -16,7 +17,7 @@ var client = newPool()
 var ctx = context.Background()
 
 // getFibSlice возвращает слайс типа uint64, содержащий в себе необходимые числа ряда, http статус и ошибку
-func GetFibSlice(start, end string) ([]uint64, int, error) {
+func GetFibSlice(start, end string) ([]string, int, error) {
 	x, err := strconv.Atoi(start)
 	if err != nil {
 		return nil, http.StatusBadRequest, err
@@ -32,7 +33,7 @@ func GetFibSlice(start, end string) ([]uint64, int, error) {
 	} else if x > y {
 		return nil, http.StatusBadRequest, errors.New("invalid input: x > y")
 	}
-	fibSlice := make([]uint64, y-x+1)
+	fibSlice := make([]string, y-x+1)
 	for i := x; i <= y; i++ {
 		fibSlice[i-x], err = getFibElementFromCache(i)
 		if err != nil {
@@ -45,15 +46,15 @@ func GetFibSlice(start, end string) ([]uint64, int, error) {
 
 // newPool возвращает указатель на клиент redis'a и заносит первые два элемента в кэш
 func newPool() *redis.Client {
-	cfg := config.GetConfig()
-	addr := cfg.GetString("redis_ip") + ":" + cfg.GetString("redis_port")
+	log.Println(os.Getenv("redis_port"))
+	addr := "redis:" + os.Getenv("redis_port")
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     addr,
-		Password: cfg.GetString("redis_pass"),
+		Password: os.Getenv("redis_pass"),
 		DB:       0,
 	})
 	if st := rdb.Ping(ctx); st.Err() != nil {
-		log.Fatalln("redis connect error: " + st.Err().Error())
+		log.Println("redis connect error: " + st.Err().Error())
 	}
 	rdb.Set(ctx, "0", 0, 0)
 	rdb.Set(ctx, "1", 1, 0)
@@ -61,23 +62,27 @@ func newPool() *redis.Client {
 }
 
 // getFibElementFromCache возвращает элемент ряда Фибоначчи под индексом i
-func getFibElementFromCache(i int) (uint64, error) {
-	val, err := client.Get(ctx, strconv.Itoa(i)).Uint64() // Если элемента нет в кэше, то вызываем calculateFibElement и записываем
-	if err == redis.Nil {                                 // полученное в кэш
+func getFibElementFromCache(i int) (string, error) {
+	val := big.NewInt(0)
+	s := client.Get(ctx, strconv.Itoa(i)).Val() // Если элемента нет в кэше, то вызываем calculateFibElement и записываем
+	if s == "" {                                // полученное в кэш
 		val = calculateFibElement(i)
-		err1 := client.Set(ctx, strconv.Itoa(int(i)), val, 0).Err()
+		err1 := client.Set(ctx, strconv.Itoa(int(i)), val.String(), 0).Err()
 		if err1 != nil {
-			return 0, err1
+			return "", err1
 		}
-	} else if err != nil {
-		return 0, err
+	} else {
+		val.SetString(s, 10)
 	}
-	return val, nil
+	return val.String(), nil
 }
 
 // calculateFibElement считает элемент по индексу
-func calculateFibElement(index int) uint64 {
-	el1, _ := getFibElementFromCache(index - 1)
-	el2, _ := getFibElementFromCache(index - 2)
-	return el1 + el2
+func calculateFibElement(index int) *big.Int {
+	el1, el2 := big.NewInt(0), big.NewInt(0)
+	s1, _ := getFibElementFromCache(index - 1)
+	s2, _ := getFibElementFromCache(index - 2)
+	el1.SetString(s1, 10)
+	el2.SetString(s2, 10)
+	return el1.Add(el1, el2)
 }

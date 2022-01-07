@@ -1,13 +1,15 @@
-package apiGRPC
+package grpc
 
 import (
 	context "context"
 	"fmt"
 	"log"
 	"net"
+	"net/http"
+	"os"
 
-	"github.com/TiregeRRR/fibApi/config"
 	f "github.com/TiregeRRR/fibApi/fibonacci"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 )
 
@@ -25,10 +27,16 @@ func (g *GRPCSrv) GetFib(ctx context.Context, fr *FibRequest) (*FibResponse, err
 	return &FibResponse{FibList: resp}, nil
 }
 
-// StartGRPC запускает grpc сервер на 8080 порту
+// StartGRPC запускает grpc сервер и REST gateway
 func StartGRPC() {
-	cfg := config.GetConfig()
-	port := cfg.GetString("grpc_port")
+	go func() {
+		port := os.Getenv("rest_port")
+		mux := runtime.NewServeMux()
+		RegisterFibHandlerServer(context.Background(), mux, &GRPCSrv{})
+		log.Printf("Starting REST gateway on %v port\n", port)
+		log.Fatalln(http.ListenAndServe(":"+port, mux))
+	}()
+	port := os.Getenv("grpc_port")
 	l, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		log.Fatalln(err)

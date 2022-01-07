@@ -1,41 +1,43 @@
 package fibonacci
 
-import "testing"
+import (
+	"testing"
+)
 
 var testCasesSlice = []struct {
 	x, y          string
-	expectedList  []uint64
+	expectedList  []string
 	expectedError error
 }{
 	{
 		x:             "0",
 		y:             "10",
-		expectedList:  []uint64{0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55},
+		expectedList:  []string{"0", "1", "1", "2", "3", "5", "8", "13", "21", "34", "55"},
 		expectedError: nil,
 	},
 	{
 		x:             "10",
 		y:             "10",
-		expectedList:  []uint64{55},
+		expectedList:  []string{"55"},
 		expectedError: nil,
 	},
 }
 
 var testCasesElement = []struct {
 	i               int
-	expectedElement uint64
+	expectedElement string
 }{
 	{
 		i:               10,
-		expectedElement: 55,
+		expectedElement: "55",
 	},
 	{
 		i:               0,
-		expectedElement: 0,
+		expectedElement: "0",
 	},
 }
 
-func equal(a, b []uint64) bool {
+func equal(a, b []string) bool {
 	if len(a) != len(b) {
 		return false
 	}

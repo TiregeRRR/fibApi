@@ -5,8 +5,15 @@ package apiGRPC;
 
 option go_package = "/grpc";
 
-service Fib{
-    rpc GetFib(FibRequest) returns (FibResponse) {}
+import "google/api/annotations.proto";
+
+service Fib{    
+    rpc GetFib(FibRequest) returns (FibResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/fib"
+            body: "*"
+        };
+    }
 }
 
 message FibRequest {
@@ -15,5 +22,5 @@ message FibRequest {
 }
 
 message FibResponse {
-    repeated uint64 fibList = 1;
+    repeated string fibList = 1;
 }
