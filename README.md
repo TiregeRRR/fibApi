@@ -1,32 +1,31 @@
 # fibApi
 Сервис реализует HTTP REST и GRPC, возвращает слайс с рядом Фибоначчи от x до y. Данные кэшируются при помощи Redis. 
 
-## Установка 
+## Требования
 
 На компьютере должны быть установлены go и docker 
-``` sh
-$ docker pull redis
-$ docker run --rm --name redis-test-instance -p 6379:6379 -d redis
-$ go mod download
-$ go mod tidy
-``` 
 
 ## Запуск 
 
-### HTTP REST
 ``` sh
-$ go run rest/main.go
+$ make run-docker
 ```
-### GRPC
+Также можно передать файл конфигурации 
 ``` sh
-$ go run grpc/main.go
+$ make run-docker ENVFILE="./config/someConf.env" 
 ```
 
 ## Использование 
 
 ### HTTP REST
-Обращение к api происходит через обычный GET-запрос. 
-Пример: http://127.0.0.1:8000/api/v1/?x=5&y=10
+Обращение к api происходит через POST-запрос, c переданными x, y в json-формате. 
+Пример curl-запроса:
+``` sh 
+$ curl -XPOST -H "Content-type: application/json" -d '{
+  "x": 0,
+  "y": 1000
+}' '172.18.0.2:8000/api/v1/fib'
+```
 
 ## GRPC 
 Обращение к api происходит через GRPC-клиент. Например: evans, Kreya. Proto-файл находится в fibApi/proto
