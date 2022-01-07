@@ -11,3 +11,6 @@ services:
       - redis_pass=${redis_pass}
       - redis_port=${redis_port}
       - rest_port=${rest_port}
+    ports:
+      - "${rest_port}"
+      - "${grpc_port}"
