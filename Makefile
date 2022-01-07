@@ -15,6 +15,10 @@ run-tests:
 	go test fibonacci/*.go
 
 
+update-modfile:
+	go mod download
+	go mod tidy
+
 ENVFILE = ./config/conf.env
 run-docker:
 	docker-compose --env-file $(ENVFILE)  up --build
