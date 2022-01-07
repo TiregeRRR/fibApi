@@ -20,5 +20,8 @@ update-modfile:
 	go mod tidy
 
 ENVFILE = ./config/conf.env
-run-docker:
-	docker-compose --env-file $(ENVFILE)  up --build
+up-docker:
+	docker-compose --env-file $(ENVFILE) up 
+
+build-and-run-docker:
+	docker-compose --env-file $(ENVFILE) up --build
