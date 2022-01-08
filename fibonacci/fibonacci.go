@@ -16,7 +16,7 @@ var client = newPool()
 
 var ctx = context.Background()
 
-// getFibSlice возвращает слайс типа uint64, содержащий в себе необходимые числа ряда, http статус и ошибку
+// getFibSlice возвращает []string, содержащий в себе необходимые числа ряда, http статус и ошибку
 func GetFibSlice(start, end string) ([]string, int, error) {
 	x, err := strconv.Atoi(start)
 	if err != nil {

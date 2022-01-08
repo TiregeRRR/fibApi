@@ -18,7 +18,7 @@ type GRPCSrv struct {
 	UnimplementedFibServer
 }
 
-// GetFib возвращает слайс uint64
+// GetFib возвращает слайс string
 func (g *GRPCSrv) GetFib(ctx context.Context, fr *FibRequest) (*FibResponse, error) {
 	resp, _, err := f.GetFibSlice(fmt.Sprint(fr.GetX()), fmt.Sprint(fr.GetY()))
 	if err != nil {
